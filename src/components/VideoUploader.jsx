@@ -36,9 +36,29 @@ const VideoUploader = () => {
   };
 
   // onclick file upload
-  const handleUpload = (e) => {
+  const handleUpload = async (e) => {
     e.preventDefault();
     // Replace this with actual upload logic
+    //
+    //
+    //
+    const formData = new FormData();
+    formData.append("operation", "upload");
+
+    files.map((fileAndPreviewUrl) => {
+          formData.append("previews", JSON.stringify(fileAndPreviewUrl.preview))
+          formData.append("payloads", fileAndPreviewUrl.newFile)
+    })
+
+    const res = await fetch('/api/upload-media', {
+            method: 'POST',
+            body: formData,
+    });
+
+    // if server action instead of api handler (not recommended for huge files)
+    //uploadServerAction(formData);
+
+    //
     console.log("Files ready to upload:", files);
     alert("Files uploaded successfully!");
     setFiles([])
